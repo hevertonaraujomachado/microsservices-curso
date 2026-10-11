@@ -1,0 +1,25 @@
+spring:
+  application:
+    name: msgateway
+
+  cloud:
+    gateway:
+      server:
+        webflux:
+          routes:
+            - id: customer-service
+              uri: lb://CUSTOMER-SERVICE
+              predicates:
+                - Path=/customer-service/**
+              filters:
+                - RewritePath=/customer-service/?(?<segment>.*), /${segment}
+
+server:
+  port: 8080
+
+eureka:
+  client:
+    fetch-registry: true
+    register-with-eureka: true
+    service-url:
+      defaultZone: http://localhost:8761/eureka/
