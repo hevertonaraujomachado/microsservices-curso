@@ -14,6 +14,13 @@ spring:
               filters:
                 - RewritePath=/customer-service/?(?<segment>.*), /${segment}
 
+            - id: mscartoes
+              uri: lb://MSCARTOES
+              predicates:
+                - Path=/mscartoes/**
+              filters:
+                - RewritePath=/mscartoes/?(?<segment>.*), /${segment}
+
 server:
   port: 8080
 
