@@ -31,10 +31,14 @@ public class CartoesController {
     }
 
     @PostMapping
-    public ResponseEntity cadastra(@RequestBody CartaoSaveRequest request ){
+    public ResponseEntity<Cartao> cadastra(
+            @RequestBody CartaoSaveRequest request) {
+
         Cartao cartao = request.toModel();
-        cartaoService.save(cartao);
-        return ResponseEntity.status(HttpStatus.CREATED).build();
+        Cartao salvo = cartaoService.save(cartao);
+
+        return ResponseEntity.status(HttpStatus.CREATED).body(salvo);
+
     }
 
     @GetMapping(params = "renda")

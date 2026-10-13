@@ -18,13 +18,16 @@ public class CartaoService {
     }
 
     @Transactional
-    public Cartao save(Cartao cartao){
+    public Cartao save(Cartao cartao) {
         return repository.save(cartao);
     }
 
-    public List<Cartao> getCartoesRendaMenorIgual(Long renda){
+    public List<Cartao> listarTodos() {
+        return repository.findAll();
+    }
+
+    public List<Cartao> getCartoesRendaMenorIgual(Long renda) {
         var rendaBigDecimal = BigDecimal.valueOf(renda);
         return repository.findByRendaLessThanEqual(rendaBigDecimal);
     }
-
 }
