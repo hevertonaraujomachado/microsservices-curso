@@ -1,5 +1,6 @@
 package io.github.cursodsousa.mscartoes.repositories.mqueue;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.github.cursodsousa.mscartoes.domain.Cartao;
 import io.github.cursodsousa.mscartoes.domain.ClienteCartao;
@@ -22,6 +23,22 @@ public class EmissaoCartaoSubscriber {
 
     @RabbitListener(queues = "${mq.queues.emissaoes-cartoes}")
     public void receberSolicitacaoEmissao(@Payload String payload){
-    System.out.println(payload);
+
+        try {
+            var mapper = new ObjectMapper();
+            DadosSolicitacaoEmissaoCartao dados = mapper.readValue(payload, DadosSolicitacaoEmissaoCartao.class);
+            Cartao cartao = cartaoRepository.findById(dados.getIdCartao()).orElseThrow();
+            ClienteCartao clienteCartao = new ClienteCartao();
+            clienteCartao.setCartao(cartao);
+            clienteCartao.setCpf(dados.getCpf());
+            clienteCartao.setLimite(dados.getLimiteLiberado());
+            clienteCartaoRepository.save(clienteCartao);
+            log.info("Solicitação de emissão de cartão recebida: {}", dados.getCpf());
+
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+
     }
 }
+
