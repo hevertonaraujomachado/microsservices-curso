@@ -19,5 +19,5 @@ eureka:
 
 mq:
   queues:
-    emissaoes-cartoes: emissoes-cartoes
+    emissoes-cartoes: emissao-cartoes
 
